@@ -1,0 +1,4 @@
+# QR Code Generator Requirements
+
+# Core package management and distribution tools
+setuptools>=40.0.0
