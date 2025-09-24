@@ -1,7 +1,7 @@
-# 🎨 Custom QR Code Generator
-
 <div align="center">
   <img src="images/logo-v1.png" alt="Custom QR Code Generator Logo" width="128" height="128">
+  
+  # 🎨 Custom QR Code Generator
   
   [![Python Version](https://img.shields.io/badge/python-3.7%2B-blue.svg)](https://python.org)
   [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
