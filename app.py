@@ -28,7 +28,7 @@ def to_svg_string(qr, border, background_color, foreground_color):
     dimension = qr.get_size() + border * 2
     parts.append(f'<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 {dimension} {dimension}" stroke="none">')
     parts.append(f'<rect width="100%" height="100%" fill="rgb({bg_r},{bg_g},{bg_b})"/>')
-    parts.append(f'<path d="', end="")
+    parts.append(f'<path d="')
     
     for y in range(qr.get_size()):
         for x in range(qr.get_size()):

@@ -18,9 +18,15 @@ const App = () => {
         body: JSON.stringify({ content, backgroundColor, foregroundColor, errorLevel })
       });
       const data = await response.json();
-      setSvg(data.svg || '');
+      if (data.error) {
+        alert('Error generating QR code: ' + data.error);
+        setSvg('');
+      } else {
+        setSvg(data.svg || '');
+      }
     } catch (error) {
       console.error('Error:', error);
+      alert('Network error occurred');
     }
     setLoading(false);
   };
