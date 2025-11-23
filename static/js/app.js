@@ -31,6 +31,19 @@ const App = () => {
     setLoading(false);
   };
 
+  const downloadSVG = () => {
+    if (!svg) return;
+    const blob = new Blob([svg], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'qrcode.svg';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return React.createElement('div', { className: 'min-h-screen bg-gray-100 p-8' },
     React.createElement('div', { className: 'max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-8' },
       React.createElement('h1', { className: 'text-3xl font-bold mb-8' }, 'Custom QR Code Generator'),
@@ -83,11 +96,15 @@ const App = () => {
           disabled: loading,
           className: 'w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50'
         }, loading ? 'Generating...' : 'Generate QR Code'),
-        svg && React.createElement('div', { className: 'mt-8 flex justify-center' },
+        svg && React.createElement('div', { className: 'mt-8 flex flex-col items-center space-y-4' },
           React.createElement('div', {
             dangerouslySetInnerHTML: { __html: svg },
-            className: 'border-2 border-gray-200 p-4 rounded-lg'
-          })
+            className: 'border-2 border-gray-200 p-4 rounded-lg w-full max-w-md'
+          }),
+          React.createElement('button', {
+            onClick: downloadSVG,
+            className: 'bg-green-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-700'
+          }, 'Download SVG')
         )
       )
     )
