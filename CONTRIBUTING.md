@@ -1,295 +1,160 @@
-# 🤝 Contributing to Custom QR Code Generator
+# Contributing
 
-Thank you for your interest in contributing to the Custom QR Code Generator! We welcome contributions from developers of all skill levels. This document provides guidelines and information on how to contribute effectively to this project.
+Thanks for improving Custom QR Code Generator. Payload correctness, privacy, and
+independent scan evidence are release constraints, not optional polish. Keep a
+change small enough that those properties remain reviewable.
 
-## 🌟 Ways to Contribute
+## Set up
 
-There are many ways you can contribute to this project:
+Requires Python 3.10–3.14 and Git.
 
-- 🐛 **Bug Reports**: Help us identify and fix issues
-- 💡 **Feature Requests**: Suggest new features or improvements
-- 🔧 **Code Contributions**: Submit bug fixes, new features, or improvements
-- 📚 **Documentation**: Improve README, add examples, or write tutorials
-- 🎨 **Design**: Contribute logos, icons, or UI improvements
-- 🧪 **Testing**: Help test the application on different platforms
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-Before contributing, make sure you have:
-
-- Python 3.7 or higher installed
-- Git installed and configured
-- A GitHub account
-- Basic knowledge of Python programming
-
-### Setting Up Your Development Environment
-
-1. **Fork the repository**
-   ```bash
-   # Click the "Fork" button on GitHub, then clone your fork
-   git clone https://github.com/YOUR_USERNAME/Custom-QR-Code-Generator.git
-   cd Custom-QR-Code-Generator
-   ```
-
-2. **Add the upstream remote**
-   ```bash
-   git remote add upstream https://github.com/juansilvadesign/Custom-QR-Code-Generator.git
-   ```
-
-3. **Create a virtual environment**
-   ```bash
-   python -m venv .env
-   ```
-
-4. **Activate the virtual environment**
-   - **Windows**: `.env\Scripts\activate`
-   - **macOS/Linux**: `source .env/bin/activate`
-
-5. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-6. **Test the installation**
-   ```bash
-   python main.py
-   ```
-
-## 📋 Contribution Workflow
-
-### For Bug Fixes and Features
-
-1. **Create a feature branch**
-   ```bash
-   git checkout -b feature/amazing-feature
-   # or for bug fixes:
-   git checkout -b bugfix/fix-issue-description
-   ```
-
-2. **Make your changes**
-   - Write clean, readable code
-   - Follow the existing code style
-   - Add comments where necessary
-   - Test your changes thoroughly
-
-3. **Commit your changes**
-   ```bash
-   git add .
-   git commit -m "Add some amazing feature"
-   ```
-   
-   **Commit Message Guidelines:**
-   - Use present tense ("Add feature" not "Added feature")
-   - Use imperative mood ("Move cursor to..." not "Moves cursor to...")
-   - Limit the first line to 72 characters or less
-   - Reference issues and pull requests liberally after the first line
-
-4. **Push to your fork**
-   ```bash
-   git push origin feature/amazing-feature
-   ```
-
-5. **Open a Pull Request**
-   - Go to your fork on GitHub
-   - Click "New Pull Request"
-   - Fill out the pull request template
-   - Link any related issues
-
-## 💡 Feature Ideas and Roadmap
-
-Here are some ideas for contributions. Feel free to pick any of these or suggest your own:
-
-### 🎨 **UI/UX Improvements**
-- [ ] **GUI Interface**: Create a graphical user interface using tkinter, PyQt, or web-based interface
-- [ ] **Progress Indicators**: Add progress bars for QR code generation
-- [ ] **Color Picker**: Visual color selection instead of text input
-- [ ] **Live Preview**: Real-time QR code preview as users type
-
-### 🚀 **Core Features**
-- [ ] **Multiple Export Formats**: PNG, JPEG, PDF export options
-- [ ] **Logo Embedding**: Add logos or images to the center of QR codes
-- [ ] **Batch Processing**: Generate multiple QR codes from CSV or text files
-- [ ] **QR Code Reading**: Decode existing QR codes
-- [ ] **Custom Shapes**: Round corners, circular QR codes
-- [ ] **Gradient Colors**: Support for gradient backgrounds/foregrounds
-
-### 🔧 **Technical Improvements**
-- [ ] **Configuration Files**: YAML/JSON config for default settings
-- [ ] **Plugin System**: Extensible architecture for custom content types
-- [ ] **CLI Arguments**: Command-line interface for scripting
-- [ ] **API Mode**: REST API for web integration
-- [ ] **Caching**: Cache generated QR codes for repeated content
-
-### 📱 **Content Type Extensions**
-- [ ] **vCard Support**: Contact information QR codes
-- [ ] **Calendar Events**: iCal event QR codes
-- [ ] **Cryptocurrency**: Bitcoin/crypto wallet addresses
-- [ ] **Social Media**: Instagram, Twitter, LinkedIn profiles
-- [ ] **App Store Links**: Direct links to mobile apps
-
-### 🧪 **Testing and Quality**
-- [ ] **Unit Tests**: Comprehensive test suite
-- [ ] **Integration Tests**: End-to-end testing
-- [ ] **Performance Tests**: Benchmark QR code generation speed
-- [ ] **Cross-platform Testing**: Ensure compatibility across OS
-
-## 🎯 Code Style Guidelines
-
-### Python Code Style
-
-- Follow [PEP 8](https://pep8.org/) style guidelines
-- Use meaningful variable and function names
-- Add docstrings to functions and classes
-- Keep functions focused and small
-- Use type hints where appropriate
-
-**Example:**
-```python
-def get_color_input(prompt: str, default_color: str) -> str:
-    """
-    Get color input from user with validation.
-    
-    Args:
-        prompt: The prompt message to display to the user
-        default_color: Default color to use if no input provided
-        
-    Returns:
-        A valid color string in hex format
-        
-    Raises:
-        ValueError: If color format is invalid
-    """
-    # Implementation here
+```bash
+git clone https://github.com/YOUR_USERNAME/Custom-QR-Code-Generator.git
+cd Custom-QR-Code-Generator
+python -m venv .venv
+source .venv/bin/activate  # Windows PowerShell: .venv\Scripts\Activate.ps1
+python -m pip install -r requirements-dev.txt
+python -m unittest discover -s tests -v
 ```
 
-### Documentation Style
+Run the surfaces locally:
 
-- Use clear, concise language
-- Include examples where helpful
-- Keep README sections focused and scannable
-- Use consistent emoji and formatting
-
-## 🐛 Bug Reports
-
-When reporting bugs, please include:
-
-1. **Clear Description**: What happened vs. what you expected
-2. **Steps to Reproduce**: Detailed steps to reproduce the issue
-3. **Environment Info**: 
-   - Operating system and version
-   - Python version
-   - Any relevant error messages
-4. **Screenshots**: If applicable, add screenshots to help explain the problem
-
-**Bug Report Template:**
-```markdown
-**Describe the bug**
-A clear and concise description of what the bug is.
-
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
-
-**Expected behavior**
-A clear and concise description of what you expected to happen.
-
-**Environment**
-- OS: [e.g. Windows 10, macOS 12.1, Ubuntu 20.04]
-- Python Version: [e.g. 3.9.7]
-- Error Message: [paste any error messages]
-
-**Additional context**
-Add any other context about the problem here.
+```bash
+python main.py
+flask --app app run --debug
 ```
 
-## 💬 Feature Requests
+`run.bat` launches the terminal surface on Windows and creates `.venv` when it is
+missing.
 
-For feature requests, please include:
+## Architecture boundaries
 
-1. **Problem Statement**: What problem does this solve?
-2. **Proposed Solution**: How would you like it to work?
-3. **Alternatives**: What alternatives have you considered?
-4. **Use Cases**: When would this feature be useful?
+- `qr_contract.py` owns plain canonical request, result, warning, and error values.
+- `qr_payloads.py` owns exact structured payload semantics.
+- `qr_core.py` owns validation, Nayuki invocation, scanability assessment,
+  metadata, matrix extraction, and the only SVG renderer.
+- `qr_files.py` owns safe local output naming and exclusive creation.
+- `main.py` and `app.py` are adapters. Do not add a payload rule, capacity rule,
+  or second SVG renderer to either surface.
+- Test code may independently parse/rasterize SVG, but production code must not
+  depend on Pillow or ZXing.
 
-## 📝 Pull Request Guidelines
+The full contract is in
+[`docs/GENERATION_CONTRACT.md`](docs/GENERATION_CONTRACT.md). If behavior changes,
+update the contract, authored fixtures, tests, README, and changelog together.
 
-### Before Submitting
+## Make a change
 
-- [ ] Code follows the project's style guidelines
-- [ ] Self-review of your own code
-- [ ] Code is commented, particularly in hard-to-understand areas
-- [ ] Documentation updates if needed
-- [ ] No merge conflicts with the main branch
+1. Create a focused branch: `git switch -c fix/short-description`.
+2. Confirm the tree and baseline: `git status --short` and `git diff`.
+3. Add or adjust an authored expectation in `tests/fixtures/payloads.json` before
+   changing payload semantics.
+4. Implement through the shared core and keep framework/terminal concerns at the
+   edges.
+5. Run the focused test module while iterating, then the complete release suite.
+6. Review the diff for payload values, credentials, machine paths, generated
+   artifacts, or debug logging before committing.
 
-### Pull Request Template
+Use standard-library type hints and focused functions. Public errors must have a
+stable lowercase underscore code and a payload-safe message. Never return raw
+exception strings from HTTP or print them on the CLI.
 
-```markdown
-## Description
-Brief description of changes and why they were made.
+## Required checks
 
-## Type of Change
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] Documentation update
+Every pull request:
 
-## Testing
-- [ ] I have tested this change locally
-- [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] New and existing unit tests pass locally with my changes
-
-## Screenshots (if applicable)
-Add screenshots to help explain your changes.
-
-## Checklist
-- [ ] My code follows the style guidelines of this project
-- [ ] I have performed a self-review of my own code
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] I have made corresponding changes to the documentation
-- [ ] My changes generate no new warnings
+```bash
+python -m unittest discover -s tests -v
+python -m pip check
 ```
 
-## 🏷️ Issue Labels
+Dependency or release changes also require:
 
-We use the following labels to categorize issues:
+```bash
+pip-audit -r requirements.txt
+pip-licenses --from=mixed --packages Flask gunicorn Pillow zxing-cpp
+```
 
-- **🐛 bug**: Something isn't working
-- **✨ enhancement**: New feature or request
-- **📚 documentation**: Improvements or additions to documentation
-- **❓ question**: Further information is requested
-- **🆘 help wanted**: Extra attention is needed
-- **👍 good first issue**: Good for newcomers
-- **🔧 maintenance**: Code maintenance and refactoring
+The suite must contain assertions; printing a response is not a test. Relevant
+changes need coverage in these layers:
 
-## 🎉 Recognition
+- exact payload builder output and UTF-8 bytes;
+- validation/error codes and capacity boundaries;
+- API media type/body size/JSON shape/cache/privacy behavior;
+- CLI redaction, cancellation, iterative sessions, paths, collisions, and
+  filesystem failures;
+- CLI/web parity for payload, SVG, warnings, and metadata;
+- parsed SVG dimensions, elements, colors, module coordinates, and absence of
+  active/external content;
+- independent ZXing decode of serialized SVG geometry.
 
-Contributors will be recognized in the following ways:
+Do not weaken or skip decoder tests to make an encoder/rendering change pass.
 
-- Listed in the project's contributors section
-- Mentioned in release notes for significant contributions
-- GitHub's automatic contributor recognition
-- Special recognition for first-time contributors
+## Adding or changing payload semantics
 
-## 📞 Getting Help
+Author exact inputs and output text in `tests/fixtures/payloads.json`, including
+reserved characters and non-Latin text relevant to the change. Compare both the
+Unicode string and UTF-8 bytes; do not calculate the expected value by calling
+the function under test.
 
-If you need help or have questions:
+Keep validation honest. The project validates formatting limits but does not
+claim an email is deliverable, phone exists, WiFi credential works, URL is safe,
+or destination content is benign.
 
-1. **Check Existing Issues**: Search for similar questions or problems
-2. **Documentation**: Review the README and code comments
-3. **Create an Issue**: Open a new issue with the "question" label
-4. **Discussion**: Use GitHub Discussions for broader topics
+A compatibility-affecting change must be called out in `CHANGELOG.md`, especially
+URI encoding, WiFi escaping, normalization, ECL boosting, borders/colors,
+filenames, response envelopes, or redaction.
 
-## 📄 License
+## Privacy and security review
 
-By contributing to this project, you agree that your contributions will be licensed under the same MIT License that covers the project. See [LICENSE](LICENSE) file for details.
+Use synthetic secrets with unique markers in tests. Assert they are absent from
+stdout, logs, errors, metadata, and filenames unless a test explicitly selects
+the reveal path. Generated SVG naturally represents the payload as modules; it
+must not contain a plaintext copy.
 
----
+For API work, test missing/wrong content type, malformed/scalar/array JSON,
+unknown fields, body limit, invalid values, unexpected exceptions, `no-store`,
+and absence of wildcard CORS. Do not log request bodies or SVG responses.
 
-Thank you for contributing to Custom QR Code Generator! 🎉
+For output work, test Unix and Windows path separators, traversal, absolute paths,
+dotfiles, meaningful/repeated extensions, reserved names, collisions, and failed
+writes. Existing files must never be overwritten.
 
-*Every contribution, no matter how small, makes a difference and is greatly appreciated.*
+## Updating `qrcodegen.py`
+
+Follow [`docs/ENCODER_PROVENANCE.md`](docs/ENCODER_PROVENANCE.md) exactly. The file
+must match an immutable upstream source byte-for-byte, retain its MIT notice, and
+have a recorded checksum. An encoder update requires the full automated decoder
+matrix and the representative manual device matrix before release.
+
+## Pull request description
+
+Include:
+
+- the user-visible problem and why this scope solves it;
+- payload/API compatibility effects;
+- privacy, path, capacity, and scanability risks considered;
+- exact commands and results used for verification;
+- manual device rows when scan behavior or the encoder changed;
+- screenshots only when the browser presentation changed.
+
+Use an imperative commit subject under 72 characters. Keep unrelated cleanup in a
+separate change.
+
+## Release gate
+
+A release is not complete because SVG generation returned success. Before tag or
+deployment, a maintainer must:
+
+1. install from a clean supported-Python environment;
+2. run the complete automated suite, dependency check, vulnerability audit, and
+   license report;
+3. exercise one terminal structured flow and the browser/API download flow;
+4. confirm no test secret is unexpectedly printed, logged, named, or persisted;
+5. complete the real-device rows in
+   `docs/milestone-c/DEVICE_MATRIX.md` for scan-affecting work;
+6. record release commit/tag and evidence in `ROADMAP.md`, `TASKS.md`, and
+   `CHANGELOG.md`.
+
+See `ROADMAP.md` for release boundaries. New export formats, logos, decorative QR
+modules, persistence, analytics, and batch generation remain out of Milestone C.

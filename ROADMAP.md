@@ -10,7 +10,7 @@ and the terminal and web surfaces share one validated generation core.
 This file owns strategy, release boundaries, and status. The actionable checklist
 lives in **[`TASKS.md`](TASKS.md)**.
 
-_Last reviewed: 2026-08-05_
+_Last reviewed: 2026-08-20_
 
 ---
 
@@ -22,7 +22,7 @@ responsive, the inferred planning baseline is fixed as follows:
 | Constraint | Fixed planning baseline |
 | --- | --- |
 | **Outcome** | A user can create and download a QR code from the terminal or browser, verify that it decodes to the exact intended payload, and understand any scannability or privacy limitation before using it. |
-| **Deadline** | End of the sixth calendar week after implementation kickoff. Record the kickoff and resulting end date before Milestone C starts; do not extend the six-week window. |
+| **Deadline** | Milestone C kicked off on **2026-08-20**. The fixed six-week frame ends on **2026-10-01**; do not extend it. |
 | **Capacity budget** | One maintainer, at most **30 maintainer-days** across Milestones C–F. No paid infrastructure. |
 | **Scope** | Open. Milestone C is protected; later releases are cut, reordered, or deferred as evidence and capacity change. |
 
@@ -140,6 +140,15 @@ ceiling is threatened.
 
 **Not in C:** feature parity in the browser, PNG/JPEG/PDF, embedded logos, dynamic
 or trackable QR codes, accounts, analytics, persistence, or a public API contract.
+
+**Implementation checkpoint — 2026-08-20:** the working-tree release candidate
+passes 48 tests from a clean Python 3.12 environment, including exact independent
+ZXing decoding, version/ECL boundaries, API/CLI security cases, and surface
+parity. Runtime dependency audit reported no known vulnerabilities; clean
+Gunicorn and interactive terminal smokes passed. Evidence is recorded in
+[`docs/milestone-c/AUTOMATED_EVIDENCE.md`](docs/milestone-c/AUTOMATED_EVIDENCE.md).
+Milestone C deliberately remains ▶: remote CI/Dependabot acceptance, the manual
+iOS/Android device matrix, and the release commit/tag are still pending.
 
 ### D — Complete structured-payload workflow in the browser ⬜
 

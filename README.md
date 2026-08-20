@@ -1,251 +1,231 @@
 <div align="center">
-  <img src="images/logo-v1.png" alt="Custom QR Code Generator Logo" width="128" height="128">
-  
-  # 🎨 Custom QR Code Generator
-  
-  [![Python Version](https://img.shields.io/badge/python-3.7%2B-blue.svg)](https://python.org)
-  [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-  [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)]()
-  
-  *A powerful, interactive QR code generator with custom colors and multiple content types*
+  <img src="images/logo-v1.png" alt="Custom QR Code Generator logo" width="128" height="128">
+
+  # Custom QR Code Generator
+
+  Exact, privacy-aware SVG QR generation for the terminal and browser.
 </div>
 
-## ✨ Features
+The project creates standard QR Code Model 2 symbols through a vendored Project
+Nayuki encoder. The terminal supports guided text, URL, email, phone, WiFi, and
+SMS payloads. The browser currently supports exact raw text. Both surfaces use
+one validation, encoding, scanability, and SVG-rendering core.
 
-- 🎨 **Custom Colors**: Choose any background and foreground colors (hex, RGB, or color names)
-- 📱 **Multiple Content Types**: Support for text, URLs, emails, phone numbers, WiFi credentials, and SMS
-- 🛡️ **Error Correction**: Four levels of error correction (Low, Medium, Quartile, High)
-- 🖥️ **Terminal Preview**: See your QR code directly in the terminal with color support
-- 💾 **Smart File Management**: Automatic unique filename generation to prevent overwrites
-- 🎯 **Interactive Interface**: User-friendly prompts guide you through the creation process
-- 🔧 **Customizable Borders**: Adjustable border size around QR codes
-- 📁 **Organized Output**: All generated QR codes are saved in the `saved/` directory
+Milestone C is a release candidate, not yet a universal scanning claim. The
+independent ZXing matrix is automated; the representative real-device matrix in
+[`docs/milestone-c/DEVICE_MATRIX.md`](docs/milestone-c/DEVICE_MATRIX.md) must be
+completed before the milestone is marked shipped.
 
-## 🚀 Quick Start
+## What it does
 
-### Prerequisites
+- Preserves arbitrary valid Unicode exactly; it does not silently normalize text.
+- Correctly percent-encodes email/SMS fields and escapes WiFi reserved characters.
+- Exposes requested and actual error correction when the encoder safely boosts it.
+- Produces deterministic, minimal, well-formed SVG with no external doctype or
+  active/external content.
+- Rejects unsafe contrast/border choices and visibly warns about reduced quiet
+  zones, accepted low contrast, and reversed polarity.
+- Hides exact payloads from terminal output and HTTP metadata by default.
+- Sanitizes CLI output names, confines them to `saved/`, and never overwrites an
+  existing file during collision handling.
+- Rejects malformed, oversized, and unknown API input with stable 4xx errors.
+- Independently decodes the serialized SVG geometry across all payload types,
+  requested correction levels, Unicode, large versions, and capacity boundaries.
 
-- Python 3.7 or higher
-- Windows, macOS, or Linux
+## Requirements
 
-### Installation
+- Python 3.10–3.14
+- A modern browser for the web surface
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/juansilvadesign/Custom-QR-Code-Generator.git
-   cd Custom-QR-Code-Generator
-   ```
+The QR encoder has no network dependency. Flask and Gunicorn are needed only for
+the web surface. Pillow and ZXing-C++ are development/test dependencies, never
+production runtime dependencies.
 
-2. **Set up a virtual environment** (recommended)
-   ```bash
-   python -m venv .env
-   ```
+## Install
 
-3. **Activate the virtual environment**
-   - **Windows**: `.env\Scripts\activate`
-   - **macOS/Linux**: `source .env/bin/activate`
+```bash
+git clone https://github.com/juansilvadesign/Custom-QR-Code-Generator.git
+cd Custom-QR-Code-Generator
+python -m venv .venv
+```
 
-4. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
+Activate the environment:
 
-### Running the Application
+```bash
+# macOS/Linux
+source .venv/bin/activate
 
-#### Option 1: Using the Batch File (Windows)
-1. Copy `run.bat.template` to `run.bat`
-2. Edit `run.bat` and replace `[YOUR_PROJECT_PATH]` with your actual project path
-3. Double-click `run.bat` or run it from command prompt
+# Windows PowerShell
+.venv\Scripts\Activate.ps1
+```
 
-#### Option 2: Direct Python Execution
+Install runtime dependencies:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+For development and the independent decoder suite:
+
+```bash
+python -m pip install -r requirements-dev.txt
+```
+
+## Terminal
+
 ```bash
 python main.py
 ```
 
-## 📖 Usage Guide
+The prompts collect a structured payload, ECL, strict final colors, quiet-zone
+border, and output name. Friendly CLI color forms—`#RRGGBB`, `RRGGBB`,
+`rgb(r,g,b)`, and common names—are converted to the core's strict format.
 
-### Content Types Supported
+By default the terminal prints a content-hidden summary only. For payloads that
+may contain private text, credentials, addresses, or numbers, exact output is
+shown only after an explicit reveal prompt. SVGs are created with mode `0600`
+where the operating system supports it, WiFi password entry is hidden, and files
+are saved under `saved/` as:
 
-| Type | Description | Example Output |
-|------|-------------|----------------|
-| **Plain Text** | Any text content | Direct text encoding |
-| **URL/Website** | Web links with auto-protocol detection | `https://example.com` |
-| **Email** | Email addresses with optional subject/body | `mailto:user@example.com?subject=Hello` |
-| **Phone Number** | Phone numbers for direct dialing | `tel:+1234567890` |
-| **WiFi Credentials** | Network connection info | `WIFI:T:WPA;S:NetworkName;P:password;;` |
-| **SMS Message** | Pre-filled text messages | `sms:+1234567890?body=Hello` |
-
-### Color Format Options
-
-The generator accepts colors in multiple formats:
-
-- **Hex Colors**: `#FF0000`, `#ff0000`, or `ff0000`
-- **RGB Values**: `rgb(255,0,0)` or `RGB(255, 0, 0)`
-- **Color Names**: `red`, `blue`, `green`, `white`, `black`, `orange`, `purple`, etc.
-
-### Error Correction Levels
-
-| Level | Correction Capacity | Use Case |
-|-------|-------------------|----------|
-| **Low** | ~7% | Clean environments, larger QR codes |
-| **Medium** | ~15% | General use (recommended) |
-| **Quartile** | ~25% | Moderately damaged environments |
-| **High** | ~30% | High-damage risk environments |
-
-## 🎯 Examples
-
-### Creating a Website QR Code
-```
-Content Type: URL/Website link
-URL: github.com/juansilvadesign
-Background: white
-Foreground: #2196F3
-Border: 4 modules
+```text
+name.svg
+name (1).svg
+name (2).svg
 ```
 
-### Creating a WiFi QR Code
-```
-Content Type: WiFi network credentials
-Network Name: MyWiFi
-Password: mypassword123
-Security: WPA
-Hidden: No
-```
+`run.bat` performs the same CLI setup/launch flow on Windows. It detects `.venv`
+and retains `.env` only for legacy environments; no template copy or path editing
+is needed.
 
-### Creating a Custom Styled QR Code
-```
-Content Type: Plain text
-Text: Hello, World!
-Background: #1a1a1a
-Foreground: #00ff41
-Border: 2 modules
+## Browser and Flask API
+
+Development server:
+
+```bash
+flask --app app run --debug
 ```
 
-## 📁 Project Structure
+Production-style server on Unix:
 
-```
-Custom-QR-Code-Generator/
-├── main.py                 # Main application with interactive interface
-├── qrcodegen.py           # QR code generation library (Project Nayuki)
-├── requirements.txt       # Python dependencies
-├── run.bat.template      # Template for Windows batch file
-├── LICENSE               # MIT License
-├── README.md            # This file
-├── images/              # Logo and assets
-│   ├── logo-v1.png
-│   ├── logo-v1.ico
-│   ├── logo-v2.png
-│   └── logo-v2.ico
-└── saved/               # Generated QR codes (auto-created)
-    └── (your QR codes will be saved here)
+```bash
+gunicorn app:app
 ```
 
-## 🛠️ Technical Details
+Open <http://127.0.0.1:5000>. The browser sends exact text to the same core used
+by the terminal, shows QR metadata and warnings, previews the safe generated SVG,
+and downloads it without server-side persistence.
 
-### Dependencies
+The endpoint accepts `POST /api/generate` with `application/json` and a JSON
+object. Example:
 
-The project uses minimal dependencies for maximum compatibility:
-- **setuptools**: For package management and distribution tools
-- **Built-in modules**: `re`, `sys`, `os` for core functionality
-
-### QR Code Library
-
-This project uses the high-quality QR code generator library by [Project Nayuki](https://www.nayuki.io/page/qr-code-generator-library), which provides:
-- Full QR Code Model 2 specification support
-- All versions (sizes) from 1 to 40
-- All 4 error correction levels
-- 4 character encoding modes
-- Clean, well-documented code
-
-### Output Format
-
-- **File Format**: SVG (Scalable Vector Graphics)
-- **Benefits**: 
-  - Infinite scalability without quality loss
-  - Small file sizes
-  - Wide compatibility
-  - Easy to convert to other formats
-
-## 🎨 Customization
-
-### Adding New Color Names
-
-You can extend the color name dictionary in `main.py` by modifying the `color_names` dictionary in the `get_color_input()` function:
-
-```python
-color_names = {
-    'black': '#000000',
-    'white': '#FFFFFF',
-    # Add your custom colors here
-    'myblue': '#1E88E5',
-    'mygreen': '#43A047',
+```json
+{
+  "payloadType": "text",
+  "fields": {"text": "Hello, 世界"},
+  "errorCorrection": "M",
+  "foreground": "#000000",
+  "background": "#FFFFFF",
+  "border": 4,
+  "outputName": "hello.svg"
 }
 ```
 
-### Modifying Default Settings
+Only `payloadType` and `fields` are required. The API supports every canonical
+payload type, although guided structured controls in the browser are planned for
+Milestone D. See [`docs/GENERATION_CONTRACT.md`](docs/GENERATION_CONTRACT.md) for
+the exact field rules, limits, response metadata, warnings, and error envelope.
+This is the bundled same-origin application endpoint, not a versioned public API
+compatibility promise.
 
-Default values can be changed in the respective functions:
-- Error correction level: `get_error_correction_level()`
-- Border size: Line with `border = int(border_input) if border_input else 4`
-- Default colors: `get_color_input()` function calls
+All API responses use `Cache-Control: no-store`. The public response deliberately
+omits the exact payload and sensitive field values. Flask does not log request
+bodies or returned SVG content, and unexpected errors return a generic code
+without exception strings or paths. Wildcard CORS is not enabled; the bundled UI
+is same-origin.
 
-## 🤝 Contributing
+## Payload semantics
 
-We welcome contributions from developers of all skill levels! Whether you want to fix bugs, add features, improve documentation, or suggest new ideas, your help is appreciated.
+| Type | Terminal | API | Browser controls | Encoded form |
+| --- | :---: | :---: | :---: | --- |
+| Text | Yes | Yes | Yes | Exact text |
+| URL | Yes | Yes | Not yet | HTTP(S), adding `https://` only when absent |
+| Email | Yes | Yes | Not yet | `mailto:` with percent-encoded subject/body |
+| Phone | Yes | Yes | Not yet | `tel:` with conservative formatting removal |
+| WiFi | Yes | Yes | Not yet | Escaped `WIFI:` payload with WPA/WEP/nopass/hidden |
+| SMS | Yes | Yes | Not yet | `sms:` with percent-encoded body |
 
-👉 **See our [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines on:**
-- Setting up your development environment
-- Code style guidelines
-- Pull request process
-- Feature ideas and roadmap
-- Bug reporting guidelines
+Validation checks structure, not real-world existence, deliverability, network
+availability, destination safety, or phone ownership.
 
-Quick start for contributors:
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/AmazingFeature`
-3. Make your changes and test thoroughly
-4. Commit: `git commit -m 'Add some AmazingFeature'`
-5. Push: `git push origin feature/AmazingFeature` 
-6. Open a Pull Request
+## Scanability policy
 
-## 📋 FAQ
+The safe default is black modules on white with a four-module quiet zone.
 
-**Q: Why SVG format instead of PNG?**
-A: SVG provides infinite scalability, smaller file sizes for simple graphics, and easy conversion to other formats when needed.
+- Contrast below 3.0:1: rejected.
+- Contrast below 4.5:1 but at least 3.0:1: warning.
+- Light modules on dark: warning because scanner support varies.
+- Border 0–1: rejected; 2–3: warning; 4+: accepted.
+- Metadata suggests eight rendered pixels per total QR module, but does not claim
+  one universal physical or print size.
 
-**Q: Can I use this for commercial projects?**
-A: Yes! This project is licensed under MIT License, which allows commercial use.
+These checks are guardrails, not accessibility scores or guarantees. Test the
+downloaded artifact in its final size, medium, lighting, and target scanner.
 
-**Q: The QR code won't scan properly. What should I do?**
-A: Try increasing the error correction level or ensuring sufficient contrast between background and foreground colors.
+## Payload and request limits
 
-**Q: How do I convert SVG to PNG?**
-A: You can use online converters, or tools like Inkscape, or even browsers (open SVG, right-click, save as image).
+The built payload uses conservative UTF-8 byte ceilings: L 2,953; M 2,331;
+Q 1,663; H 1,273. The HTTP JSON body limit is 16,384 bytes. Exceeding the body
+limit returns 413; exceeding QR capacity returns a stable 422 error. Empty or
+invalid structured fields use their own error codes.
 
-## 📄 License
+## Test and release checks
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+```bash
+python -m unittest discover -s tests -v
+python -m pip check
+pip-audit -r requirements.txt
+pip-licenses --from=mixed --packages Flask gunicorn Pillow zxing-cpp
+```
 
-The QR code generation library is also under MIT License by Project Nayuki.
+The suite covers unit, API, CLI/filesystem, parity, deterministic SVG/XML,
+security boundaries, and independent exact decoding. CI exercises Python
+3.10–3.14 on Linux plus endpoint versions on Windows and macOS. A release also
+requires the manual device matrix; skipped/manual evidence cannot be replaced by
+an SVG-generation success.
 
-## 🙏 Acknowledgments
+## Project structure
 
-- **[Project Nayuki](https://www.nayuki.io/)** for the excellent QR code generation library
-- **[Denso Wave](https://www.denso-wave.com/)** for inventing QR codes
-- The Python community for excellent documentation and tools
+```text
+app.py                         Flask adapter
+main.py                        interactive terminal adapter
+qr_contract.py                 canonical request/result/error values
+qr_payloads.py                 structured payload builders
+qr_core.py                     validation, encoding, scanability, SVG rendering
+qr_files.py                    safe filename and exclusive output handling
+qrcodegen.py                   vendored Project Nayuki encoder
+static/js/app.js               browser adapter
+templates/index.html           browser shell
+tests/                         release suite and exact fixture catalog
+docs/GENERATION_CONTRACT.md    complete behavior contract
+docs/ENCODER_PROVENANCE.md     source, checksum, license, update procedure
+render.yaml                    Render deployment definition
+run.bat                        Windows CLI launcher
+```
 
-## 📞 Support
+Encoder origin and the byte-for-byte checksum are recorded in
+[`docs/ENCODER_PROVENANCE.md`](docs/ENCODER_PROVENANCE.md). Do not update the
+vendored file without the full decoder and device matrix.
 
-If you encounter any issues or have questions:
+## Deployment
 
-1. Check the [FAQ section](#-faq) above
-2. Search existing [GitHub Issues](../../issues)
-3. Create a new issue with detailed information about your problem
+`render.yaml` installs `requirements.txt` and runs `gunicorn app:app`. The app is
+stateless and does not write generated payloads or SVGs on the server. Milestone E
+still owns local frontend assets, a restrictive CSP, operational abuse controls,
+and deployment smoke/rollback work; the current hosted UI continues to load its
+React/Tailwind runtime from CDNs.
 
----
+## Contributing and license
 
-<div align="center">
-  Made with ❤️ by <a href="https://github.com/juansilvadesign">Juan Silva</a>
-  <br>
-  <sub>⭐ Star this repository if you found it useful!</sub>
-</div>
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) for executable setup, test, audit, and
+release expectations. Application code and the vendored encoder are MIT licensed;
+the upstream encoder notice is retained inside `qrcodegen.py`.

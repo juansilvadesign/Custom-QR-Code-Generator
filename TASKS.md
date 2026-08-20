@@ -3,7 +3,7 @@
 The living implementation checklist. Strategy, release boundaries, and the fixed
 frame live in **[`ROADMAP.md`](ROADMAP.md)**.
 
-_Last reviewed: 2026-08-05_
+_Last reviewed: 2026-08-20_
 
 > Milestones **A–B** are shipped. **C is the only execution-ready milestone.**
 > Items under D–F are deliberately coarse and must be re-planned after the
@@ -15,163 +15,167 @@ _Last reviewed: 2026-08-05_
 
 **Capacity ceiling:** 12 maintainer-days.
 
+**Release-candidate checkpoint (2026-08-20):** all locally executable work below
+is complete. Three release gates remain open: real-device scan evidence,
+Dependabot acceptance after push, and the final release commit/tag plus D re-plan.
+
 **Exit outcome:** terminal and web requests pass through one validated generation
 core, produce the same exact payload/SVG semantics, reject or explain unsafe
 choices, protect sensitive content, and pass independent decoder tests.
 
 ### 0. Start the fixed frame
 
-- [ ] Record the implementation kickoff date and resulting six-week end date in
+- [x] Record the implementation kickoff date and resulting six-week end date in
       [`ROADMAP.md`](ROADMAP.md#fixed-frame); keep the 30-day total and C's 12-day
       ceiling fixed.
-- [ ] Capture a clean git baseline and record the starting commit in C's release
+- [x] Capture a clean git baseline and record the starting commit in C's release
       notes. Preserve unrelated work if the tree is not clean.
-- [ ] Create a fixture catalog with exact expected payloads for plain ASCII and
+- [x] Create a fixture catalog with exact expected payloads for plain ASCII and
       Unicode text, normalized URLs, email optional fields, international phone,
       WiFi WPA/WEP/nopass/hidden networks, SMS bodies, empty input, and capacity
       boundaries.
-- [ ] Include reserved characters (`&`, `?`, `;`, `:`, comma, backslash, quotes,
+- [x] Include reserved characters (`&`, `?`, `;`, `:`, comma, backslash, quotes,
       percent, spaces, and line breaks) plus non-Latin text in the fixture catalog.
-- [ ] Capture representative current CLI/web SVGs and decoded results before
+- [x] Capture representative current CLI/web SVGs and decoded results before
       changing generation semantics.
 
 ### 1. Lock the generation contract
 
-- [ ] Define a canonical generation request with payload type/fields, requested
+- [x] Define a canonical generation request with payload type/fields, requested
       error correction, foreground/background, border, and optional output name.
-- [ ] Define a canonical result with encoded payload, privacy-safe summary, SVG,
+- [x] Define a canonical result with encoded payload, privacy-safe summary, SVG,
       QR version/module size/mask, requested and actual error correction, border,
       warnings, and deterministic error codes.
-- [ ] Decide and document URL normalization, email/SMS query encoding, phone
+- [x] Decide and document URL normalization, email/SMS query encoding, phone
       normalization limits, and WiFi escaping/security/hidden-field semantics.
-- [ ] Preserve arbitrary valid Unicode and define whether output comparison is by
+- [x] Preserve arbitrary valid Unicode and define whether output comparison is by
       exact text, UTF-8 bytes, or normalized form; never normalize invisibly.
-- [ ] Define strict limits by request bytes and encoder capacity for each error
+- [x] Define strict limits by request bytes and encoder capacity for each error
       correction level, including the difference between too-large requests and
       invalid structured fields.
-- [ ] Define safe defaults and allowed ranges for border and colors. Document when
+- [x] Define safe defaults and allowed ranges for border and colors. Document when
       a risky choice is rejected versus returned with a warning.
-- [ ] Define encoder ECL boosting semantics: either request an exact level or expose
+- [x] Define encoder ECL boosting semantics: either request an exact level or expose
       both requested and actual levels when the encoder increases protection.
-- [ ] Make SVG structure deterministic enough for cross-surface parity while
+- [x] Make SVG structure deterministic enough for cross-surface parity while
       keeping semantic tests resilient to harmless formatting.
 
 ### 2. Build one shared core
 
-- [ ] Extract payload builders, validation, `qrcodegen` invocation, SVG rendering,
+- [x] Extract payload builders, validation, `qrcodegen` invocation, SVG rendering,
       scanability assessment, and result metadata into import-safe shared modules.
-- [ ] Make `main.py` a terminal adapter and `app.py` a Flask adapter; neither may
+- [x] Make `main.py` a terminal adapter and `app.py` a Flask adapter; neither may
       maintain a second SVG renderer or payload rule.
-- [ ] Keep framework/terminal concerns out of the core so unit tests can call it
+- [x] Keep framework/terminal concerns out of the core so unit tests can call it
       with plain Python values.
-- [ ] Remove the external SVG doctype and emit well-formed minimal XML with only
+- [x] Remove the external SVG doctype and emit well-formed minimal XML with only
       validated numeric/color/path data.
-- [ ] Preserve the SVG quiet zone and module grid exactly; prevent renderer changes
+- [x] Preserve the SVG quiet zone and module grid exactly; prevent renderer changes
       from moving, rounding, or merging functional modules incorrectly.
-- [ ] Record the vendored `qrcodegen.py` upstream URL, license notice, upstream
+- [x] Record the vendored `qrcodegen.py` upstream URL, license notice, upstream
       version/commit, local checksum, and deliberate local modifications, if any.
-- [ ] Add a documented encoder-update procedure that requires the full decoder
+- [x] Add a documented encoder-update procedure that requires the full decoder
       matrix before changing the vendored file.
 
 ### 3. Correct structured payloads and CLI safety
 
-- [ ] Encode email subject/body and SMS fields with the chosen URI rules so reserved
+- [x] Encode email subject/body and SMS fields with the chosen URI rules so reserved
       characters and Unicode round-trip exactly.
-- [ ] Escape WiFi SSID/password reserved characters, validate security modes, omit
+- [x] Escape WiFi SSID/password reserved characters, validate security modes, omit
       irrelevant credentials for `nopass`, and preserve the hidden-network flag.
-- [ ] Normalize only clearly incomplete URLs; preserve valid schemes deliberately
+- [x] Normalize only clearly incomplete URLs; preserve valid schemes deliberately
       allowed by the contract and reject malformed values with actionable errors.
-- [ ] Validate required fields for email, phone, WiFi, and SMS without pretending to
+- [x] Validate required fields for email, phone, WiFi, and SMS without pretending to
       prove that an address, number, network, or destination exists.
-- [ ] Replace recursive “create another” calls with an iterative session loop.
-- [ ] Replace bare exception handling with specific cancellation, validation,
+- [x] Replace recursive “create another” calls with an iterative session loop.
+- [x] Replace bare exception handling with specific cancellation, validation,
       capacity, filesystem, and unexpected-error paths.
-- [ ] Stop printing complete sensitive payloads. Show a redacted summary by default
+- [x] Stop printing complete sensitive payloads. Show a redacted summary by default
       and require explicit intent to reveal/copy a WiFi password or private body.
-- [ ] Sanitize the requested filename to a safe basename, preserve meaningful dots,
+- [x] Sanitize the requested filename to a safe basename, preserve meaningful dots,
       force the `.svg` suffix, and prove the resolved path stays inside `saved/`.
-- [ ] Create the output directory safely and write via an exclusive/atomic path so
+- [x] Create the output directory safely and write via an exclusive/atomic path so
       collision handling cannot overwrite an existing file.
 
 ### 4. Harden the generation API
 
-- [ ] Require `application/json` and a JSON object; reject missing, malformed,
+- [x] Require `application/json` and a JSON object; reject missing, malformed,
       scalar, array, and unknown-field requests with stable 4xx responses.
-- [ ] Set an explicit request-body limit before JSON parsing and map oversized
+- [x] Set an explicit request-body limit before JSON parsing and map oversized
       requests to a stable 413 response.
-- [ ] Validate payload fields, strict six-digit colors, error level, border, and
+- [x] Validate payload fields, strict six-digit colors, error level, border, and
       content capacity through the shared core rather than silently defaulting bad
       values.
-- [ ] Map validation, capacity, unsupported-type, media-type, and unexpected errors
+- [x] Map validation, capacity, unsupported-type, media-type, and unexpected errors
       to a documented response envelope and status code.
-- [ ] Never return raw exception strings, filesystem details, stack traces, or
+- [x] Never return raw exception strings, filesystem details, stack traces, or
       payload content in production errors.
-- [ ] Remove wildcard CORS for the same-origin application. If a future consumer
+- [x] Remove wildcard CORS for the same-origin application. If a future consumer
       requires cross-origin access, add an explicit allowlist as a separate product
       decision.
-- [ ] Add `Cache-Control: no-store` to payload-bearing responses and ensure app/
+- [x] Add `Cache-Control: no-store` to payload-bearing responses and ensure app/
       proxy logs do not include request bodies or generated SVG content.
-- [ ] Return QR metadata and warnings beside SVG so the browser can explain what
+- [x] Return QR metadata and warnings beside SVG so the browser can explain what
       was generated instead of inferring success from HTTP 200 alone.
 
 ### 5. Define and prove scanability
 
-- [ ] Choose a documented, implementation-independent contrast/polarity assessment
+- [x] Choose a documented, implementation-independent contrast/polarity assessment
       and label it as a scanability guard—not a guarantee or accessibility score.
-- [ ] Preserve a safe quiet-zone default. Reject or strongly warn on reduced borders
+- [x] Preserve a safe quiet-zone default. Reject or strongly warn on reduced borders
       according to evidence from the decoder/device matrix.
-- [ ] Include QR version, module count, border, and recommended minimum rendered
+- [x] Include QR version, module count, border, and recommended minimum rendered
       dimensions in result metadata without claiming one universal physical size.
-- [ ] Add an independent decoder as a development/test dependency, not a production
+- [x] Add an independent decoder as a development/test dependency, not a production
       runtime dependency.
-- [ ] Decode generated fixtures and compare exact expected payloads across all six
+- [x] Decode generated fixtures and compare exact expected payloads across all six
       content types, four requested error levels, Unicode, and capacity boundaries.
-- [ ] Test representative high/low contrast, normal/reversed polarity, safe/reduced
+- [x] Test representative high/low contrast, normal/reversed polarity, safe/reduced
       border, and small/large QR versions; encode expected rejection/warning/pass
       outcomes from evidence.
 - [ ] Scan a release fixture set with representative real mobile scanners and
       record device/app, display/print size, lighting/medium, and result.
-- [ ] Never make a release claim broader than the automated and manual matrix.
+- [x] Never make a release claim broader than the automated and manual matrix.
 
 ### 6. Replace the print-only test with a release suite
 
-- [ ] Convert `test_app.py` into assertions under a standard test runner and split
+- [x] Convert `test_app.py` into assertions under a standard test runner and split
       unit, endpoint, CLI/filesystem, parity, SVG/XML, decoder, and security cases
       as the suite grows.
-- [ ] Test every payload fixture for exact builder output and exact independent
+- [x] Test every payload fixture for exact builder output and exact independent
       decode output.
-- [ ] Test malformed colors, unknown ECL/type, wrong JSON shapes/media types,
+- [x] Test malformed colors, unknown ECL/type, wrong JSON shapes/media types,
       empty/oversized content, encoder capacity failure, and stable error codes.
-- [ ] Test safe filenames against `..`, absolute paths, separators, dotfiles,
+- [x] Test safe filenames against `..`, absolute paths, separators, dotfiles,
       repeated dots/extensions, reserved names where relevant, collisions, and
       filesystem failures.
-- [ ] Test that sensitive fixture values are absent from captured stdout, logs,
+- [x] Test that sensitive fixture values are absent from captured stdout, logs,
       errors, response metadata, and filenames unless explicit reveal was selected.
-- [ ] Test CLI/web parity from the same canonical request, comparing payload,
+- [x] Test CLI/web parity from the same canonical request, comparing payload,
       warnings, metadata, module matrix, and semantic SVG output.
-- [ ] Parse every SVG as XML and assert dimension, background, path/module count,
+- [x] Parse every SVG as XML and assert dimension, background, path/module count,
       colors, absence of external references/scripts, and deterministic structure.
-- [ ] Add CI for the actually supported Python range and operating systems; use
+- [x] Add CI for the actually supported Python range and operating systems; use
       evidence to replace the unverified README claim of Python 3.7+.
 
 ### 7. Reconcile dependencies, docs, and release evidence
 
-- [ ] Separate runtime and development/test dependencies, pin or constrain them
+- [x] Separate runtime and development/test dependencies, pin or constrain them
       deliberately, and run a current dependency/license/security audit before
       release.
 - [ ] Fix `.github/dependabot.yml` to monitor the real Python package manifest and
       verify the configuration is accepted.
-- [ ] Update `README.md` to document both CLI and web surfaces, exact supported
+- [x] Update `README.md` to document both CLI and web surfaces, exact supported
       payloads per surface, privacy behavior, validation/scanability limits, actual
       files, correct `run.bat` instructions, deployment, and test commands.
-- [ ] Update `CONTRIBUTING.md` so completed web/API work is not still listed as a
+- [x] Update `CONTRIBUTING.md` so completed web/API work is not still listed as a
       future idea and so its test/release checklist is executable.
-- [ ] Add `CHANGELOG.md` and record changed payload encoding, validation, errors,
+- [x] Add `CHANGELOG.md` and record changed payload encoding, validation, errors,
       filename behavior, redaction, and compatibility notes.
-- [ ] Import/run the project from a clean environment, execute the terminal fixture
+- [x] Import/run the project from a clean environment, execute the terminal fixture
       flow, exercise the Flask endpoint/browser, and download/open the resulting
       SVGs.
-- [ ] Verify no secret is persisted or logged, no filename escapes `saved/`, bad
+- [x] Verify no secret is persisted or logged, no filename escapes `saved/`, bad
       requests are bounded, and all release fixtures independently decode.
 - [ ] Record the release commit/tag and verification evidence in
       [`ROADMAP.md`](ROADMAP.md), mark C shipped, and re-plan D inside the remaining
