@@ -1,0 +1,2 @@
+# Keep the vendored Nayuki source byte-for-byte identical to its pinned upstream.
+qrcodegen.py whitespace=-blank-at-eol

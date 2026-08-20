@@ -5,11 +5,11 @@ echo ========================================================
 echo              Custom QR Code Generator
 echo ========================================================
 
-REM Define virtual environment folder
+REM Prefer the current .venv convention.
 set "VENV_DIR=.venv"
 
-REM Check if .env exists (legacy support)
-if exist ".env" (
+REM Use a complete legacy .env only when .venv is not already usable.
+if not exist ".venv\Scripts\python.exe" if exist ".env\Scripts\python.exe" (
     set "VENV_DIR=.env"
 )
 
@@ -46,7 +46,12 @@ set "PYTHON_EXE=!VENV_DIR!\Scripts\python.exe"
 REM Install requirements
 if exist "requirements.txt" (
     echo Checking and installing requirements...
-    "!PYTHON_EXE!" -m pip install -r requirements.txt >nul 2>&1
+    "!PYTHON_EXE!" -m pip install -r requirements.txt
+    if !errorlevel! neq 0 (
+        echo Error: Failed to install required packages.
+        pause
+        exit /b 1
+    )
 )
 
 REM Run the application

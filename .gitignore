@@ -2,5 +2,9 @@
 saved
 build
 .env
+.venv
 __pycache__
+*.py[cod]
+.coverage
+.pytest_cache
 backup.js

@@ -1,0 +1,9 @@
+-r requirements.txt
+
+# Independent SVG decode matrix (never imported by production code).
+Pillow==12.3.0
+zxing-cpp==3.1.1
+
+# Release-time dependency, license, and vulnerability evidence.
+pip-audit==2.10.1
+pip-licenses==5.5.5
