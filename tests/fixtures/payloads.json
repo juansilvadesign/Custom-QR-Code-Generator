@@ -1,0 +1,133 @@
+{
+  "contractVersion": 1,
+  "comparison": "Exact Unicode scalar sequence and exact UTF-8 bytes; no normalization",
+  "payloads": [
+    {
+      "id": "text_ascii",
+      "payloadType": "text",
+      "fields": {"text": "Hello, QR!"},
+      "expected": "Hello, QR!"
+    },
+    {
+      "id": "text_unicode_reserved",
+      "payloadType": "text",
+      "fields": {"text": "Olá, 世界 — مرحبا & ? ; : , \\ \" % spaces\nsecond line"},
+      "expected": "Olá, 世界 — مرحبا & ? ; : , \\ \" % spaces\nsecond line"
+    },
+    {
+      "id": "url_normalized",
+      "payloadType": "url",
+      "fields": {"url": "example.com/a/b?x=1&label=Ol%C3%A1%20mundo#parte"},
+      "expected": "https://example.com/a/b?x=1&label=Ol%C3%A1%20mundo#parte"
+    },
+    {
+      "id": "url_preserved_https",
+      "payloadType": "url",
+      "fields": {"url": "https://example.com:8443/a?x=1&y=%25#frag"},
+      "expected": "https://example.com:8443/a?x=1&y=%25#frag"
+    },
+    {
+      "id": "email_optional_unicode",
+      "payloadType": "email",
+      "fields": {
+        "address": "ana+qr@example.com",
+        "subject": "Olá & status?",
+        "body": "Linha 1\nLinha 2: 100%, \\ \"sim\""
+      },
+      "expected": "mailto:ana+qr@example.com?subject=Ol%C3%A1%20%26%20status%3F&body=Linha%201%0ALinha%202%3A%20100%25%2C%20%5C%20%22sim%22"
+    },
+    {
+      "id": "phone_international",
+      "payloadType": "phone",
+      "fields": {"phone": "+55 (11) 98765-4321"},
+      "expected": "tel:+5511987654321"
+    },
+    {
+      "id": "wifi_wpa_reserved_hidden",
+      "payloadType": "wifi",
+      "fields": {
+        "ssid": "Studio;Guest, \"SP\":5G\\",
+        "password": "p:a;ss,\\word\"?",
+        "security": "WPA",
+        "hidden": true
+      },
+      "expected": "WIFI:T:WPA;S:Studio\\;Guest\\, \\\"SP\\\"\\:5G\\\\;P:p\\:a\\;ss\\,\\\\word\\\"?;H:true;;"
+    },
+    {
+      "id": "wifi_wep",
+      "payloadType": "wifi",
+      "fields": {
+        "ssid": "Legacy 网络",
+        "password": "A1:B2;C3",
+        "security": "wep",
+        "hidden": false
+      },
+      "expected": "WIFI:T:WEP;S:Legacy 网络;P:A1\\:B2\\;C3;H:false;;"
+    },
+    {
+      "id": "wifi_nopass_ignores_password",
+      "payloadType": "wifi",
+      "fields": {
+        "ssid": "Guest;Free",
+        "password": "must-not-appear",
+        "security": "nopass",
+        "hidden": false
+      },
+      "expected": "WIFI:T:nopass;S:Guest\\;Free;H:false;;",
+      "warningCodes": ["ignored_wifi_password"]
+    },
+    {
+      "id": "sms_unicode_body",
+      "payloadType": "sms",
+      "fields": {
+        "phone": "+44 20 7946 0958",
+        "body": "Olá & ready? 100%; linha 1\nlinha 2: \\ \"sim\""
+      },
+      "expected": "sms:+442079460958?body=Ol%C3%A1%20%26%20ready%3F%20100%25%3B%20linha%201%0Alinha%202%3A%20%5C%20%22sim%22"
+    }
+  ],
+  "invalid": [
+    {
+      "id": "empty_text",
+      "payloadType": "text",
+      "fields": {"text": ""},
+      "errorCode": "empty_payload_field"
+    },
+    {
+      "id": "malformed_email",
+      "payloadType": "email",
+      "fields": {"address": "not-an-address"},
+      "errorCode": "invalid_email"
+    },
+    {
+      "id": "invalid_phone_letters",
+      "payloadType": "phone",
+      "fields": {"phone": "+55-CALL-NOW"},
+      "errorCode": "invalid_phone"
+    },
+    {
+      "id": "wifi_unknown_security",
+      "payloadType": "wifi",
+      "fields": {"ssid": "Network", "password": "secret", "security": "SAE"},
+      "errorCode": "invalid_wifi_security"
+    },
+    {
+      "id": "wifi_missing_password",
+      "payloadType": "wifi",
+      "fields": {"ssid": "Network", "security": "WPA"},
+      "errorCode": "missing_wifi_password"
+    },
+    {
+      "id": "url_unsupported_scheme",
+      "payloadType": "url",
+      "fields": {"url": "javascript:alert(1)"},
+      "errorCode": "unsupported_url_scheme"
+    }
+  ],
+  "capacityBoundaries": [
+    {"errorCorrection": "L", "value": "a", "atLimit": 2953, "overLimit": 2954},
+    {"errorCorrection": "M", "value": "a", "atLimit": 2331, "overLimit": 2332},
+    {"errorCorrection": "Q", "value": "a", "atLimit": 1663, "overLimit": 1664},
+    {"errorCorrection": "H", "value": "a", "atLimit": 1273, "overLimit": 1274}
+  ]
+}
