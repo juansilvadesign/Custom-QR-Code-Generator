@@ -10,7 +10,7 @@ and the terminal and web surfaces share one validated generation core.
 This file owns strategy, release boundaries, and status. The actionable checklist
 lives in **[`TASKS.md`](TASKS.md)**.
 
-_Last reviewed: 2026-08-20_
+_Last reviewed: 2026-08-21_
 
 ---
 
@@ -141,14 +141,23 @@ ceiling is threatened.
 **Not in C:** feature parity in the browser, PNG/JPEG/PDF, embedded logos, dynamic
 or trackable QR codes, accounts, analytics, persistence, or a public API contract.
 
-**Implementation checkpoint — 2026-08-20:** the working-tree release candidate
-passes 48 tests from a clean Python 3.12 environment, including exact independent
-ZXing decoding, version/ECL boundaries, API/CLI security cases, and surface
-parity. Runtime dependency audit reported no known vulnerabilities; clean
-Gunicorn and interactive terminal smokes passed. Evidence is recorded in
+**Implementation checkpoint — 2026-08-21:** the release candidate passes 48 tests
+from a clean Python 3.12 environment, including exact independent ZXing decoding,
+version/ECL boundaries, API/CLI security cases, and surface parity. Runtime
+dependency audit reported no known vulnerabilities; clean Gunicorn and
+interactive terminal smokes passed. Evidence is recorded in
 [`docs/milestone-c/AUTOMATED_EVIDENCE.md`](docs/milestone-c/AUTOMATED_EVIDENCE.md).
-Milestone C deliberately remains ▶: remote CI/Dependabot acceptance, the manual
-iOS/Android device matrix, and the release commit/tag are still pending.
+
+The remote gate is now closed at `6ea790f`: the GitHub Actions matrix passes
+**10/10** across Python 3.10–3.14 on Linux, Windows, and macOS, and Dependabot is
+accepted and green. The earlier push at `0512cf3` failed both Windows legs
+because `.gitattributes` did not disable end-of-line conversion for the pinned
+vendored encoder; `-text` corrected it.
+
+Milestone C deliberately remains ▶: the manual iOS/Android device matrix in
+[`docs/milestone-c/DEVICE_MATRIX.md`](docs/milestone-c/DEVICE_MATRIX.md) is still
+unrecorded, and the release commit/tag is still pending. Scannable artifacts for
+that matrix are produced by `python export_release_fixtures.py`.
 
 ### D — Complete structured-payload workflow in the browser ⬜
 

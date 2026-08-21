@@ -3,7 +3,7 @@
 The living implementation checklist. Strategy, release boundaries, and the fixed
 frame live in **[`ROADMAP.md`](ROADMAP.md)**.
 
-_Last reviewed: 2026-08-20_
+_Last reviewed: 2026-08-21_
 
 > Milestones **A–B** are shipped. **C is the only execution-ready milestone.**
 > Items under D–F are deliberately coarse and must be re-planned after the
@@ -15,9 +15,16 @@ _Last reviewed: 2026-08-20_
 
 **Capacity ceiling:** 12 maintainer-days.
 
-**Release-candidate checkpoint (2026-08-20):** all locally executable work below
-is complete. Three release gates remain open: real-device scan evidence,
-Dependabot acceptance after push, and the final release commit/tag plus D re-plan.
+**Release-candidate checkpoint (2026-08-21):** all locally executable work below
+is complete, and the remote gate is now closed. The branch is pushed at
+`6ea790f`, the full GitHub Actions matrix passes **10/10** including both Windows
+legs, and Dependabot is accepted and green. Two release gates remain open:
+real-device scan evidence, and the final release commit/tag plus D re-plan.
+
+The first push (`0512cf3`) failed CI on both Windows runners: `.gitattributes`
+did not disable end-of-line conversion for the vendored encoder, so those
+checkouts arrived as CRLF and the pinned SHA-256 did not match. `qrcodegen.py`
+now carries `-text`, which fixed it.
 
 **Exit outcome:** terminal and web requests pass through one validated generation
 core, produce the same exact payload/SVG semantics, reject or explain unsafe
@@ -135,6 +142,10 @@ choices, protect sensitive content, and pass independent decoder tests.
       outcomes from evidence.
 - [ ] Scan a release fixture set with representative real mobile scanners and
       record device/app, display/print size, lighting/medium, and result.
+      Generate the artifacts first with `python export_release_fixtures.py`; it
+      writes the eight matrix fixtures, a print sheet, and a manifest into
+      `fixtures/release/` and refuses to emit anything it cannot independently
+      decode.
 - [x] Never make a release claim broader than the automated and manual matrix.
 
 ### 6. Replace the print-only test with a release suite
@@ -163,8 +174,10 @@ choices, protect sensitive content, and pass independent decoder tests.
 - [x] Separate runtime and development/test dependencies, pin or constrain them
       deliberately, and run a current dependency/license/security audit before
       release.
-- [ ] Fix `.github/dependabot.yml` to monitor the real Python package manifest and
-      verify the configuration is accepted.
+- [x] Fix `.github/dependabot.yml` to monitor the real Python package manifest and
+      verify the configuration is accepted. Accepted and green on 2026-08-20; the
+      obsolete `Flask-Cors` PR #1 was closed on 2026-08-21 because Milestone C
+      removed that dependency.
 - [x] Update `README.md` to document both CLI and web surfaces, exact supported
       payloads per surface, privacy behavior, validation/scanability limits, actual
       files, correct `run.bat` instructions, deployment, and test commands.
