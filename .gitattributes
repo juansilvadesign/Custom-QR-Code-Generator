@@ -1,2 +1,5 @@
 # Keep the vendored Nayuki source byte-for-byte identical to its pinned upstream.
-qrcodegen.py whitespace=-blank-at-eol
+# `-text` disables end-of-line conversion in both directions, so the checked-out
+# file hashes to the pinned SHA-256 on every platform. Without it, Windows
+# checkouts convert to CRLF and the CI encoder-checksum gate fails there.
+qrcodegen.py -text whitespace=-blank-at-eol

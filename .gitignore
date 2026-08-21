@@ -1,6 +1,10 @@
 
 saved
 build
+
+# Release fixtures are deterministic derived output; regenerate them with
+# `python export_release_fixtures.py` instead of committing ~600 KB of SVG.
+fixtures/release
 .env
 .venv
 __pycache__
