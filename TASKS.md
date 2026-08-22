@@ -191,15 +191,46 @@ choices, protect sensitive content, and pass independent decoder tests.
 - [x] Verify no secret is persisted or logged, no filename escapes `saved/`, bad
       requests are bounded, and all release fixtures independently decode.
 - [ ] Record the release commit/tag and verification evidence in
-      [`ROADMAP.md`](ROADMAP.md), mark C shipped, and re-plan D inside the remaining
-      capacity.
+      [`ROADMAP.md`](ROADMAP.md) and mark C shipped. The re-plan half of this item
+      is **done** — see the 2026-08-21 re-plan checkpoint in `ROADMAP.md`: E moved
+      ahead of D, the browser surface goes dependency-free vanilla, and C's claim
+      is narrowed to Android + on-display. What remains is blocked on the eight
+      `DEVICE_MATRIX.md` rows, which still read `Pending`.
+
+---
+
+## Next after C — Milestone E: reliable, private-by-default public deployment ⬜
+
+Moved ahead of D on 2026-08-21 so the browser surface is rebuilt once, before D
+multiplies it. See the re-plan checkpoint in [`ROADMAP.md`](ROADMAP.md).
+
+- [ ] Remove the three CDN `<script>` tags from `templates/index.html` and rewrite
+      `static/js/app.js` (175 lines, 50 `React.createElement` calls) as
+      hand-authored vanilla JS and CSS. No `package.json`, bundler, or
+      `node_modules` enters this repository.
+- [ ] Add a restrictive content security policy that forbids third-party script
+      origins. The page still working with the policy applied is the mechanical
+      proof the CDN dependency is actually gone, not merely unreferenced.
+- [ ] Confirm the web surface renders and generates with the network blocked,
+      matching the CLI and this frame's fixed offline constraint.
+- [ ] Add security headers, proxy-aware production configuration, redacted
+      structured logs, and a documented no-retention privacy statement.
+- [ ] Add explicit request, timeout, concurrency, and abuse safeguards proportionate
+      to the free hosted service.
+- [ ] Add health/readiness and deployed smoke checks that generate and decode a
+      non-sensitive fixture.
+- [ ] Verify clean deploy/rollback behavior, environment versions, dependency
+      updates, and helpful safe failure when the service is unavailable.
 
 ---
 
 ## Later — Milestone D: complete structured-payload workflow in the browser ⬜
 
-Do not expand these items until C proves shared payload correctness and scanability.
+Do not expand these items until C proves shared payload correctness and
+scanability, and E has settled the dependency-free runtime D is written against.
 
+- [ ] Settle one explicit state-and-render pattern for the vanilla surface and
+      reuse it across all six payload types instead of improvising per field.
 - [ ] Add a payload-type selector and guided fields for text, URL, email, phone,
       WiFi, and SMS using only the shared builders.
 - [ ] Show the exact privacy-safe encoded summary, required/optional fields, and
@@ -211,23 +242,8 @@ Do not expand these items until C proves shared payload correctness and scanabil
 - [ ] Generate a safe meaningful download filename and expose QR metadata with the
       saved SVG.
 - [ ] Validate mobile layout, keyboard/focus, contrast, zoom, and screen-reader
-      behavior.
-- [ ] Run the checkpoint and re-cut E/F using observed web usage and errors.
-
----
-
-## Later — Milestone E: reliable, private-by-default public deployment ⬜
-
-- [ ] Replace CDN runtime scripts with locally built or dependency-free static
-      assets and add a restrictive content security policy.
-- [ ] Add security headers, proxy-aware production configuration, redacted
-      structured logs, and a documented no-retention privacy statement.
-- [ ] Add explicit request, timeout, concurrency, and abuse safeguards proportionate
-      to the free hosted service.
-- [ ] Add health/readiness and deployed smoke checks that generate and decode a
-      non-sensitive fixture.
-- [ ] Verify clean deploy/rollback behavior, environment versions, dependency
-      updates, and helpful safe failure when the service is unavailable.
+      behavior against the shipped assets, not framework defaults.
+- [ ] Run the checkpoint and re-cut F using observed web usage and errors.
 
 ---
 

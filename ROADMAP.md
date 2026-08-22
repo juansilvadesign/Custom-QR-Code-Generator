@@ -83,9 +83,38 @@ downloads a styled SVG from raw text. The latest web/runtime fixes end at
 | **E** | Reliable, private-by-default public deployment | ⬜ | 6 days | Removing third-party/runtime and operational fragility supports repeat public use. |
 | **F** | Reproducible command-line and API automation | ⬜ | 5 days | Teams want to generate tested QR assets repeatedly from scripts and build workflows. |
 
-The current order is **A → B → C → D → E → F**. Only C is detailed enough to
-execute. D–F are option boundaries, not promises; re-plan them after every shipped
+The current order is **A → B → C → E → D → F**. E and D were swapped at the
+2026-08-21 re-plan recorded below. Only C and E are detailed enough to execute. D
+and F remain option boundaries, not promises; re-plan them after every shipped
 release.
+
+#### Re-plan checkpoint — 2026-08-21
+
+C closed at roughly two days against a twelve-day ceiling, leaving about ten days
+of slack inside the fixed frame. Three decisions were taken with that slack.
+
+**E moves ahead of D.** `templates/index.html` still loads Tailwind, React 18, and
+ReactDOM 18 from third-party CDNs at runtime, and `static/js/app.js` is 175 lines
+built from 50 raw `React.createElement` calls with no build step. D's scope — six
+payload types with guided fields, per-field errors, privacy cues for secrets, and
+a debounced preview — would multiply that file several times over, written against
+a runtime E is scheduled to delete. Building D first means writing the
+structured-payload UI twice. The CDN dependency is also a live violation of this
+document's own fixed constraint that the encoder stay usable without a network
+connection: the CLI honours it, while the web surface cannot render at all without
+reaching unpkg.
+
+**The browser surface becomes dependency-free.** E replaces the CDN scripts with
+hand-authored static assets: no framework, no build step, and no package manager
+introduced into this repository. This extends the vendoring philosophy already
+applied to `qrcodegen.py`, makes the offline constraint true for both surfaces,
+and removes a supply chain instead of relocating it into `node_modules`. The cost
+is accepted deliberately — D's form-heavy UI will own its own state and DOM
+updates rather than leaning on `useState`.
+
+**C's release claim is narrowed, not widened.** The available hardware could not
+evidence three of the eight matrix rows; see the C section below for what ships
+and what stays unclaimed.
 
 ### A — Interactive terminal QR generator ✅
 
@@ -154,10 +183,28 @@ accepted and green. The earlier push at `0512cf3` failed both Windows legs
 because `.gitattributes` did not disable end-of-line conversion for the pinned
 vendored encoder; `-text` corrected it.
 
-Milestone C deliberately remains ▶: the manual iOS/Android device matrix in
-[`docs/milestone-c/DEVICE_MATRIX.md`](docs/milestone-c/DEVICE_MATRIX.md) is still
-unrecorded, and the release commit/tag is still pending. Scannable artifacts for
-that matrix are produced by `python export_release_fixtures.py`.
+Milestone C remains ▶ until two things land: the real-device results in
+[`docs/milestone-c/DEVICE_MATRIX.md`](docs/milestone-c/DEVICE_MATRIX.md), which
+still reads `Pending` in all eight rows, and the release commit/tag. Scannable
+artifacts for that matrix are produced by `python export_release_fixtures.py`.
+
+**Release claim, narrowed 2026-08-21.** The available hardware is an Android
+phone, no printer, and a 1080p display. Five rows (02, 04, 05, 06, 08) can carry
+full evidence. Three cannot, so the claim is narrowed rather than assumed:
+
+- Row 01 specifies iOS. Scanning it on Android retires the Unicode-payload
+  variable but not the iOS device-family one; those are two claims in one row.
+- Row 03 specifies print at approximately 30 mm. Displayed at a calibrated 30 mm
+  the size claim holds, but the printed medium stays unevidenced.
+- Row 07's recommended minimum of 1480 px exceeds a 1080p panel. A pass below the
+  recommended minimum is additional evidence; a failure there is consistent with
+  the recommendation and is not a blocker.
+
+C therefore ships as verified on **Android, on-display, at the recorded sizes**.
+iOS and printed media remain covered by the automated ZXing matrix alone. Note
+also that an emissive display flatters contrast: row 05 is the accepted
+low-contrast fixture at 4.48:1, and a pass on a bright monitor does not transfer
+to reflective print.
 
 ### D — Complete structured-payload workflow in the browser ⬜
 
@@ -170,19 +217,41 @@ secrets, border/scanability controls, debounced preview, accessible errors, and 
 safe downloadable filename. It reuses C's shared builders and does not invent a
 second client-side encoding contract.
 
+**Now sequenced after E (2026-08-21).** D builds on E's dependency-free vanilla
+surface, so the six payload types are authored once against the final runtime.
+Two consequences follow. State for six payload types, per-field errors, and a
+debounced preview is hand-managed rather than held in `useState`, so D should
+settle one small explicit state-and-render pattern in its first item and reuse it
+across every type instead of improvising per field. And because the browser can no
+longer reach a CDN, D's accessibility item is checked against the shipped assets
+rather than against framework defaults.
+
 **Assumption retired:** structured guidance materially reduces invalid payloads and
 makes the browser more useful than a raw-text wrapper.
 
-### E — Reliable, private-by-default public deployment ⬜
+### E — Reliable, private-by-default public deployment ⬜ (next after C)
 
 **Value shipped:** the hosted generator loads predictably, does not depend on
 third-party CDNs at runtime, does not retain payloads, and fails safely under bad
 or excessive requests.
 
-Candidate scope is locally built or dependency-free frontend assets, a restrictive
-content security policy and security headers, redacted structured logs, health and
-smoke checks, explicit request/time/concurrency safeguards, correct proxy/runtime
-configuration, dependency update automation, and a documented privacy statement.
+Scope is dependency-free frontend assets, a restrictive content security policy
+and security headers, redacted structured logs, health and smoke checks, explicit
+request/time/concurrency safeguards, correct proxy/runtime configuration,
+dependency update automation, and a documented privacy statement.
+
+**Frontend direction, decided 2026-08-21:** hand-authored vanilla JavaScript and
+CSS. The three CDN `<script>` tags in `templates/index.html` are removed, and the
+50 `React.createElement` calls in `static/js/app.js` are rewritten without a
+framework. No `package.json`, no bundler, no `node_modules` enters this
+repository. A CSP that forbids third-party script origins is the mechanical proof
+the dependency is gone — if the page still works with the policy applied, nothing
+is reaching out.
+
+This milestone now precedes D so that the structured-payload UI is written once,
+on the final runtime, rather than built on CDN React and then migrated. E rebuilds
+only today's small raw-text surface, which is a far cheaper thing to port than D's
+six guided payload types would be.
 
 **Assumption retired:** the hosted surface receives enough repeat use to justify a
 maintained production path instead of being treated as a demo.
