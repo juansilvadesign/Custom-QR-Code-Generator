@@ -3,15 +3,16 @@
 The living implementation checklist. Strategy, release boundaries, and the fixed
 frame live in **[`ROADMAP.md`](ROADMAP.md)**.
 
-_Last reviewed: 2026-08-21_
+_Last reviewed: 2026-10-06_
 
-> Milestones **A–B** are shipped. **C is the only execution-ready milestone.**
+> Milestones **A–C** are shipped. The fixed frame ended on **2026-10-01** and was
+> not extended; E, D, and F did not start inside it and need a new frame first.
 > Items under D–F are deliberately coarse and must be re-planned after the
 > preceding retrospective.
 
 ---
 
-## Next — Milestone C: correct, private, independently scannable output ▶
+## Completed — Milestone C: correct, private, independently scannable output ✅
 
 **Capacity ceiling:** 12 maintainer-days.
 
@@ -25,6 +26,11 @@ The first push (`0512cf3`) failed CI on both Windows runners: `.gitattributes`
 did not disable end-of-line conversion for the vendored encoder, so those
 checkouts arrived as CRLF and the pinned SHA-256 did not match. `qrcodegen.py`
 now carries `-text`, which fixed it.
+
+**Shipped (2026-10-06):** both remaining gates are closed. The eight device rows
+are recorded in
+[`docs/milestone-c/DEVICE_MATRIX.md`](docs/milestone-c/DEVICE_MATRIX.md), and the
+release commit is `86619af`. See the C section of [`ROADMAP.md`](ROADMAP.md).
 
 **Exit outcome:** terminal and web requests pass through one validated generation
 core, produce the same exact payload/SVG semantics, reject or explain unsafe
@@ -192,12 +198,12 @@ choices, protect sensitive content, and pass independent decoder tests.
       SVGs.
 - [x] Verify no secret is persisted or logged, no filename escapes `saved/`, bad
       requests are bounded, and all release fixtures independently decode.
-- [ ] Record the release commit/tag and verification evidence in
-      [`ROADMAP.md`](ROADMAP.md) and mark C shipped. The re-plan half of this item
-      is **done** — see the 2026-08-21 re-plan checkpoint in `ROADMAP.md`: E moved
-      ahead of D, the browser surface goes dependency-free vanilla, and C's claim
-      is narrowed to Android + on-display. What remains is blocked on the eight
-      `DEVICE_MATRIX.md` rows, which still read `Pending`.
+- [x] Record the release commit/tag and verification evidence in
+      [`ROADMAP.md`](ROADMAP.md) and mark C shipped. Release commit `86619af`,
+      recorded 2026-10-06 with the eight `DEVICE_MATRIX.md` rows. The re-plan half
+      of this item was done at the 2026-08-21 re-plan checkpoint in `ROADMAP.md`:
+      E moved ahead of D, the browser surface goes dependency-free vanilla, and
+      C's claim is narrowed to Android + on-display.
 
 ---
 
@@ -205,6 +211,9 @@ choices, protect sensitive content, and pass independent decoder tests.
 
 Moved ahead of D on 2026-08-21 so the browser surface is rebuilt once, before D
 multiplies it. See the re-plan checkpoint in [`ROADMAP.md`](ROADMAP.md).
+
+Not started. The fixed frame closed on 2026-10-01, so this milestone needs a new
+frame before work begins.
 
 - [ ] Remove the three CDN `<script>` tags from `templates/index.html` and rewrite
       `static/js/app.js` (175 lines, 50 `React.createElement` calls) as

@@ -3,7 +3,9 @@
 All notable changes are recorded here. The project has not assigned a semantic
 version yet.
 
-## Unreleased — Milestone C
+## Milestone C — 2026-10-06
+
+Release commit `86619af`.
 
 ### Added
 
@@ -18,6 +20,8 @@ version yet.
   independent ZXing decode tests plus cross-platform CI.
 - Encoder provenance, fixture baseline, contract, update procedure, and manual
   device-matrix template.
+- Real-device scan evidence for the eight release fixtures, read by one Android
+  phone on a display and recorded in `docs/milestone-c/DEVICE_MATRIX.md`.
 
 ### Changed
 

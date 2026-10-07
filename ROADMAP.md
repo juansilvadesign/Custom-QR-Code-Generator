@@ -10,7 +10,7 @@ and the terminal and web surfaces share one validated generation core.
 This file owns strategy, release boundaries, and status. The actionable checklist
 lives in **[`TASKS.md`](TASKS.md)**.
 
-_Last reviewed: 2026-08-21_
+_Last reviewed: 2026-10-06_
 
 ---
 
@@ -22,7 +22,7 @@ responsive, the inferred planning baseline is fixed as follows:
 | Constraint | Fixed planning baseline |
 | --- | --- |
 | **Outcome** | A user can create and download a QR code from the terminal or browser, verify that it decodes to the exact intended payload, and understand any scannability or privacy limitation before using it. |
-| **Deadline** | Milestone C kicked off on **2026-08-20**. The fixed six-week frame ends on **2026-10-01**; do not extend it. |
+| **Deadline** | Milestone C kicked off on **2026-08-20**. The fixed six-week frame ended on **2026-10-01** and was not extended. |
 | **Capacity budget** | One maintainer, at most **30 maintainer-days** across Milestones C–F. No paid infrastructure. |
 | **Scope** | Open. Milestone C is protected; later releases are cut, reordered, or deferred as evidence and capacity change. |
 
@@ -78,7 +78,7 @@ downloads a styled SVG from raw text. The latest web/runtime fixes end at
 | --- | --- | --- | --- | --- |
 | **A** | Interactive terminal QR generator | ✅ | Shipped | Users value custom SVG QR generation without a hosted service. |
 | **B** | Browser generation, preview, download, and deployment | ✅ | Shipped | A browser surface reduces setup friction enough to justify hosting. |
-| **C** | Correct, private, independently scannable output | ▶ | 12 days | Trust and successful scanning matter more than adding customization options. |
+| **C** | Correct, private, independently scannable output | ✅ | Shipped at `86619af` · [device evidence](docs/milestone-c/DEVICE_MATRIX.md) | Trust and successful scanning matter more than adding customization options. |
 | **D** | Complete structured-payload workflow in the browser | ⬜ | 7 days | Web users need guided URL/email/phone/WiFi/SMS creation, not only raw text. |
 | **E** | Reliable, private-by-default public deployment | ⬜ | 6 days | Removing third-party/runtime and operational fragility supports repeat public use. |
 | **F** | Reproducible command-line and API automation | ⬜ | 5 days | Teams want to generate tested QR assets repeatedly from scripts and build workflows. |
@@ -116,6 +116,19 @@ updates rather than leaning on `useState`.
 evidence three of the eight matrix rows; see the C section below for what ships
 and what stays unclaimed.
 
+#### Frame close — 2026-10-01
+
+The fixed frame ended on 2026-10-01 and was not extended. This entry was written
+on 2026-10-06, when C's device evidence was recorded.
+
+**C shipped** at `86619af`. Its code, CI, and device scans were complete on
+2026-08-21; the scan rows and the release identifier were recorded on 2026-10-06.
+The evidence and the narrowed claim are in the C section below.
+
+**E, D, and F did not start inside the frame.** They stay in the table as
+unstarted option boundaries, in the order above, and the closed frame does not
+carry them. Taking any of them up means setting a new frame first.
+
 ### A — Interactive terminal QR generator ✅
 
 The original MVP guides a user through payload type, error correction, colors,
@@ -130,7 +143,7 @@ correction, inline SVG preview, download, Gunicorn startup, and Render deploymen
 Follow-up commits repaired request argument handling, preview/download behavior,
 and Windows startup logic. It proves both surfaces are useful enough to harden.
 
-### C — Correct, private, independently scannable output ▶
+### C — Correct, private, independently scannable output ✅
 
 **Value shipped:** whether a QR is created in the terminal or browser, the user
 receives the same validated payload and SVG, an honest warning/error for unsafe
@@ -183,10 +196,14 @@ accepted and green. The earlier push at `0512cf3` failed both Windows legs
 because `.gitattributes` did not disable end-of-line conversion for the pinned
 vendored encoder; `-text` corrected it.
 
-Milestone C remains ▶ until two things land: the real-device results in
-[`docs/milestone-c/DEVICE_MATRIX.md`](docs/milestone-c/DEVICE_MATRIX.md), which
-still reads `Pending` in all eight rows, and the release commit/tag. Scannable
-artifacts for that matrix are produced by `python export_release_fixtures.py`.
+**Shipped — 2026-10-06, release commit `86619af`.** Both remaining gates are
+closed. The eight real-device rows in
+[`docs/milestone-c/DEVICE_MATRIX.md`](docs/milestone-c/DEVICE_MATRIX.md) are
+recorded: one Android phone read all eight fixtures on 2026-08-21, and the rows
+were written on 2026-10-06. At `86619af` the suite passes 48 of 48 tests on
+Python 3.12, GitHub Actions run `37550208752` passes all ten jobs, and
+`python export_release_fixtures.py` regenerates the scanned fixture set byte for
+byte. The generator code is unchanged since `6ea790f`.
 
 **Release claim, narrowed 2026-08-21.** The available hardware is an Android
 phone, no printer, and a 1080p display. Five rows (02, 04, 05, 06, 08) can carry

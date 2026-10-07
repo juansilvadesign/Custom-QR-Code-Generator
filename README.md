@@ -11,10 +11,11 @@ Nayuki encoder. The terminal supports guided text, URL, email, phone, WiFi, and
 SMS payloads. The browser currently supports exact raw text. Both surfaces use
 one validation, encoding, scanability, and SVG-rendering core.
 
-Milestone C is a release candidate, not yet a universal scanning claim. The
-independent ZXing matrix is automated; the representative real-device matrix in
-[`docs/milestone-c/DEVICE_MATRIX.md`](docs/milestone-c/DEVICE_MATRIX.md) must be
-completed before the milestone is marked shipped.
+Milestone C is shipped with a deliberately narrow scanning claim, not a universal
+one. The independent ZXing matrix is automated, and one Android phone also read
+all eight release fixtures on a display. The rows, sizes, and limits are recorded
+in [`docs/milestone-c/DEVICE_MATRIX.md`](docs/milestone-c/DEVICE_MATRIX.md); iOS
+and printed media are covered by the automated matrix alone.
 
 ## What it does
 
