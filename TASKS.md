@@ -140,12 +140,14 @@ choices, protect sensitive content, and pass independent decoder tests.
 - [x] Test representative high/low contrast, normal/reversed polarity, safe/reduced
       border, and small/large QR versions; encode expected rejection/warning/pass
       outcomes from evidence.
-- [ ] Scan a release fixture set with representative real mobile scanners and
+- [x] Scan a release fixture set with representative real mobile scanners and
       record device/app, display/print size, lighting/medium, and result.
       Generate the artifacts first with `python export_release_fixtures.py`; it
       writes the eight matrix fixtures, a print sheet, and a manifest into
       `fixtures/release/` and refuses to emit anything it cannot independently
-      decode.
+      decode. Recorded 2026-10-06 in
+      [`docs/milestone-c/DEVICE_MATRIX.md`](docs/milestone-c/DEVICE_MATRIX.md):
+      eight of eight pass on one Android phone, on-display, scanned 2026-08-21.
 - [x] Never make a release claim broader than the automated and manual matrix.
 
 ### 6. Replace the print-only test with a release suite
